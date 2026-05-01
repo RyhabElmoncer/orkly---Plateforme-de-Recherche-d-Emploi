@@ -1,0 +1,60 @@
+<div class="auth-layout">
+  <div class="auth-sidebar">
+    <div class="sidebar-content">
+      <div class="logo-icon">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+          <circle cx="32" cy="32" r="32" fill="rgba(255,255,255,0.15)"/>
+          <path d="M20 28c0-2 1.5-3.5 3.5-3.5h17c2 0 3.5 1.5 3.5 3.5v8c0 2-1.5 3.5-3.5 3.5h-17c-2 0-3.5-1.5-3.5-3.5v-8z"
+                stroke="white" stroke-width="2" fill="none"/>
+          <circle cx="32" cy="20" r="5" stroke="white" stroke-width="2" fill="none"/>
+        </svg>
+      </div>
+
+      <h1 class="brand-name">Workly</h1>
+      <p class="brand-tagline">Bon retour parmi nous !</p>
+      <p class="brand-subtitle">
+        Connecte-toi pour accéder<br>à ton tableau de bord.
+      </p>
+    </div>
+
+    <div class="sidebar-footer">
+      Pas encore inscrit ?
+      <a routerLink="/auth/register" class="register-link">S'inscrire</a>
+    </div>
+  </div>
+
+  <div class="auth-main">
+    <div class="auth-card fade-in-up">
+      <h2 class="form-title">Se connecter</h2>
+      <p class="form-subtitle">Accédez à votre espace personnel Workly.</p>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control"
+                 placeholder="exemple@email.com"
+                 formControlName="email">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Mot de passe</label>
+          <input type="password" class="form-control"
+                 placeholder="••••••••"
+                 formControlName="password">
+        </div>
+
+        <div *ngIf="errorMessage()" class="alert-error">
+          ⚠ {{ errorMessage() }}
+        </div>
+
+        <button type="submit"
+                class="btn btn-primary btn-lg btn-full mt-4"
+                [disabled]="isLoading()">
+          {{ isLoading() ? 'Connexion...' : 'Se connecter →' }}
+        </button>
+
+      </form>
+    </div>
+  </div>
+</div>

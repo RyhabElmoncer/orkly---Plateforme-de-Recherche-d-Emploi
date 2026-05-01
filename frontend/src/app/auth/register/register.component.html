@@ -1,0 +1,139 @@
+<div class="auth-layout">
+  <!-- Left Panel -->
+  <div class="auth-sidebar">
+    <div class="sidebar-content">
+
+      <div class="logo-wrapper">
+        <img src="assets/logo.png" alt="Workly Logo" class="logo-img">
+      </div>
+
+      <p class="brand-tagline">Ton avenir commence ici.</p>
+      <p class="brand-subtitle">Complète tes informations<br>pour commencer.</p>
+    </div>
+    <div class="sidebar-footer">
+      Déjà inscrit ? <a routerLink="/auth/login" class="login-link">Se connecter</a>
+    </div>
+  </div>
+
+  <!-- Right Panel -->
+  <div class="auth-main">
+    <div class="auth-card fade-in-up">
+
+      <!-- Stepper -->
+      <div class="stepper">
+        <div class="step" [class.active]="currentStep() >= 1" [class.completed]="currentStep() > 1">
+          <div class="step-circle">{{ currentStep() > 1 ? '✓' : '1' }}</div>
+          <span class="step-label">Informations personnelles</span>
+        </div>
+        <div class="step-line" [class.completed]="currentStep() > 1"></div>
+        <div class="step" [class.active]="currentStep() >= 2" [class.completed]="currentStep() > 2">
+          <div class="step-circle">2</div>
+          <span class="step-label">Évaluation</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" [class.active]="currentStep() >= 3">
+          <div class="step-circle">3</div>
+          <span class="step-label">Résultat & Offres</span>
+        </div>
+      </div>
+
+      <h2 class="form-title">Crée ton compte</h2>
+      <p class="form-subtitle">Remplis tes informations pour que Workly puisse t'accompagner.</p>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <!-- Row 1 -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Prénom</label>
+            <input type="text" class="form-control" placeholder="Ex : Ahmed" formControlName="firstName"
+                   [class.error]="isFieldInvalid('firstName')">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nom</label>
+            <input type="text" class="form-control" placeholder="Ex : Ben Ali" formControlName="lastName"
+                   [class.error]="isFieldInvalid('lastName')">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" placeholder="exemple@email.com" formControlName="email"
+                   [class.error]="isFieldInvalid('email')">
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-row single">
+          <div class="form-group">
+            <label class="form-label">Mot de passe</label>
+            <input type="password" class="form-control" placeholder="••••••••" formControlName="password"
+                   [class.error]="isFieldInvalid('password')">
+          </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Date de naissance</label>
+            <input type="date" class="form-control" formControlName="birthDate">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ville</label>
+            <input type="text" class="form-control" placeholder="Ex : Tunis" formControlName="city">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Niveau d'études</label>
+            <select class="form-control" formControlName="educationLevel">
+              <option value="">Sélectionner votre niveau</option>
+              <option value="Bac">Bac</option>
+              <option value="Bac+2">Bac+2 (BTS/DUT)</option>
+              <option value="Bac+3">Bac+3 (Licence)</option>
+              <option value="Bac+5">Bac+5 (Master/Ingénieur)</option>
+              <option value="Doctorat">Doctorat</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="form-row two-col">
+          <div class="form-group">
+            <label class="form-label">Spécialité / Domaine</label>
+            <input type="text" class="form-control" placeholder="Ex : Informatique" formControlName="speciality">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Année d'obtention</label>
+            <select class="form-control" formControlName="graduationYear">
+              <option value="">Sélectionner l'année</option>
+              <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Skills -->
+        <div class="skills-section">
+          <h3 class="skills-title">Compétences clés</h3>
+          <p class="skills-subtitle">Sélectionne quelques compétences que tu maîtrises.</p>
+          <div class="skills-grid">
+            <span *ngFor="let skill of availableSkills"
+                  class="skill-tag"
+                  [class.selected]="isSkillSelected(skill)"
+                  (click)="toggleSkill(skill)">
+              {{ skill }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Error message -->
+        <div *ngIf="errorMessage()" class="alert-error">
+          <span>⚠</span> {{ errorMessage() }}
+        </div>
+
+        <!-- Submit -->
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-lg" [disabled]="isLoading()">
+            <span *ngIf="!isLoading()">Continuer →</span>
+            <span *ngIf="isLoading()" class="loading-spinner">...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

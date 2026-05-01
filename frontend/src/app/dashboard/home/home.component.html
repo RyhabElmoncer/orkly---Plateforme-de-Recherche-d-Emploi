@@ -1,0 +1,110 @@
+<div class="dashboard-home fade-in">
+  <!-- Welcome Banner -->
+  <div class="welcome-banner">
+    <div class="welcome-text">
+      <h1>Bonjour, {{ currentUser()?.firstName }} 👋</h1>
+      <p>Voici un aperçu de votre profil et des offres recommandées.</p>
+    </div>
+    <div class="welcome-score" *ngIf="analysis()">
+      <div class="score-badge">
+        <span class="score-num">{{ analysis()!.score }}</span>
+        <span class="score-denom">/100</span>
+      </div>
+      <div class="score-label">Score obtenu</div>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon blue">◉</div>
+      <div class="stat-info">
+        <div class="stat-num">{{ currentUser()?.skills?.length || 0 }}</div>
+        <div class="stat-label">Compétences</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon green">⬡</div>
+      <div class="stat-info">
+        <div class="stat-num">{{ jobs().length }}</div>
+        <div class="stat-label">Offres disponibles</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon orange">◈</div>
+      <div class="stat-info">
+        <div class="stat-num">{{ analysis()?.score || 0 }}%</div>
+        <div class="stat-label">Score CV</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon purple">★</div>
+      <div class="stat-info">
+        <div class="stat-num">{{ analysis()?.improvements?.length || 0 }}</div>
+        <div class="stat-label">Points à améliorer</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Grid -->
+  <div class="content-grid">
+    <!-- Recommended Jobs -->
+    <div class="section-card jobs-section">
+      <div class="section-header">
+        <h2>Offres recommandées</h2>
+        <a routerLink="/dashboard/jobs" class="btn btn-outline btn-sm">Voir toutes →</a>
+      </div>
+      <div class="jobs-list">
+        <div *ngFor="let job of jobs().slice(0,4)" class="job-item">
+          <div class="job-logo" [style.background]="job.companyColor">
+            {{ job.companyInitials }}
+          </div>
+          <div class="job-info">
+            <div class="job-title">{{ job.title }}</div>
+            <div class="job-company">{{ job.company }} · {{ job.location }}</div>
+            <div class="job-tags">
+              <span *ngFor="let s of job.requiredSkills?.slice(0,2)" class="badge badge-blue">{{ s }}</span>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm">Voir l'offre</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CV Evaluation Summary -->
+    <div class="section-card eval-section" *ngIf="analysis()">
+      <div class="section-header">
+        <h2>Mon évaluation</h2>
+        <a routerLink="/dashboard/evaluation" class="btn btn-outline btn-sm">Détails →</a>
+      </div>
+
+      <div class="score-ring-container">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#e2e8f0" stroke-width="10"/>
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#2563eb" stroke-width="10"
+            stroke-dasharray="314"
+            [attr.stroke-dashoffset]="getDashOffset(analysis()!.score)"
+            stroke-linecap="round"
+            transform="rotate(-90 60 60)"/>
+        </svg>
+        <div class="ring-text">
+          <span class="ring-score">{{ analysis()!.score }}</span>
+          <span class="ring-max">/100</span>
+        </div>
+      </div>
+
+      <p class="eval-message">{{ analysis()!.message }}</p>
+
+      <div class="improvements-list">
+        <div *ngFor="let imp of analysis()!.improvements?.slice(0,3)" class="improvement-item">
+          <span class="bullet">•</span>
+          <span>{{ imp }}</span>
+        </div>
+      </div>
+
+      <a routerLink="/dashboard/evaluation" class="btn btn-primary btn-full mt-4">
+        Améliorer mon profil
+      </a>
+    </div>
+  </div>
+</div>
